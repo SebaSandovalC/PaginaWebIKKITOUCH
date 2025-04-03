@@ -1,0 +1,56 @@
+/* Sección Hero */
+.hero {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-color);
+    position: relative;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    isolation: isolate;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.hero-logo {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    padding: 0;
+    margin: 0;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Logo fijo - solo visible en la sección hero */
+.fixed-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.fixed-logo img {
+    max-width: 80%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+} 

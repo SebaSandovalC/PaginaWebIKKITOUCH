@@ -1,0 +1,114 @@
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .hero {
+        height: 100vh;
+    }
+    
+    .header {
+        height: var(--navbar-height);
+        background: rgba(0, 0, 0, 0.9);
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        gap: 0;
+    }
+    
+    .hero-logo {
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+    }
+    
+    .about {
+        padding: 4rem 1rem;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .about-text {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .about-image {
+        width: 300px;
+        height: 300px;
+    }
+
+    .portfolio {
+        padding: 4rem 1rem;
+    }
+
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .gallery-item {
+        aspect-ratio: 2/3;
+    }
+    
+    .gallery-item img {
+        object-fit: cover;
+    }
+    
+    .modal img {
+        padding: 1rem;
+    }
+    
+    .modal-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    #modalPrice {
+        font-size: 1.5rem;
+    }
+
+    .portfolio-filters {
+        gap: 1rem;
+    }
+
+    .filter-btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .contact {
+        padding: 6rem 1rem 3rem;
+    }
+
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .contact-info {
+        padding: 1rem;
+    }
+
+    .contact-info h3 {
+        font-size: 1.5rem;
+    }
+
+    .contact-form {
+        padding: 2rem;
+    }
+}
+
+/* Ajuste para pantallas muy grandes */
+@media (min-width: 1920px) {
+    .hero-logo {
+        width: 100vw;
+        height: 100vh;
+    }
+} 

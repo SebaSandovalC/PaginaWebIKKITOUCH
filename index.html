@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKKITOUCH - Portfolio de Ilustración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="#inicio" class="logo">
+                <span class="ikki">I<span class="reversed-k">K</span>KI</span><span class="touch">TOUCH</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#sobre-mi">Sobre Mí</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li class="social-links">
+                    <a href="https://www.instagram.com/ikkitouch/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/raul.g.maldonado.3/" target="_blank" class="social-icon"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.deviantart.com/ikkitouch" target="_blank" class="social-icon"><i class="fab fa-deviantart"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero">
+            <img src="IMG/DIBUJOLOGO.webp" alt="IKKITOUCH Logo" class="hero-logo">
+        </section>
+
+        <section id="portfolio" class="portfolio">
+            <h2><span>Portfolio</span></h2>
+            
+            <div class="portfolio-filters">
+                <button class="filter-btn active" data-category="all"><span>Todos</span></button>
+                <button class="filter-btn" data-category="caballeros"><span>Caballeros del Zodiaco</span></button>
+                <button class="filter-btn" data-category="pokemon"><span>Pokémon</span></button>
+                <button class="filter-btn" data-category="dbz"><span>Dragon Ball Z</span></button>
+                <button class="filter-btn" data-category="myl"><span>MYL</span></button>
+            </div>
+
+            <div class="gallery">
+                <!-- Las imágenes se cargarán dinámicamente con JavaScript -->
+            </div>
+
+            <!-- Modal para vista ampliada -->
+            <div class="modal" id="imageModal">
+                <span class="close-modal">&times;</span>
+                <div class="modal-content">
+                    <img src="" alt="" id="modalImage">
+                    <div class="modal-info">
+                        <h3 id="modalTitle"></h3>
+                        <p id="modalDescription"></p>
+                        <div class="modal-price">
+                            <span id="modalPrice"></span>
+                            <button class="add-to-cart-btn">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre-mi" class="about">
+            <h2><span>Sobre Mí</span></h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Soy un ilustrador chileno apasionado por el arte y la creatividad. Mi trabajo se centra en ilustraciones digitales con un estilo detallado y expresivo. Actualmente, soy ilustrador oficial del juego de cartas Mitos y Leyendas y Moneta Games, donde plasmo mi visión en cada carta y personaje, dando vida a mundos fantásticos.</p>
+                    <p>Me especializo en la creación de ilustraciones que capturan la esencia de cada idea, transformándolas en imágenes únicas que transmiten emoción y narrativa. Siempre estoy en búsqueda de nuevos desafíos y colaboraciones que me permitan seguir explorando el arte en todas sus formas.</p>
+                </div>
+                <div class="about-image">
+                    <img src="IMG/fotoraulperfil.webp" alt="Raúl - Ilustrador">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="https://www.instagram.com/ikkitouch/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/raul.g.maldonado.3/" target="_blank" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.deviantart.com/ikkitouch" target="_blank" class="social-icon"><i class="fab fa-deviantart"></i></a>
+            </div>
+            <p>&copy; 2025 Ikki Touch. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

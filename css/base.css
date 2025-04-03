@@ -1,0 +1,39 @@
+/* Variables globales */
+:root {
+    --primary-color: #000000;
+    --secondary-color: #FF6B00;
+    --text-color: #333333;
+    --background-color: #ffffff;
+    --accent-color: #FF8533;
+    --transition-speed: 0.3s;
+    --navbar-height: 60px;
+}
+
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    overflow-x: hidden;
+}
+
+/* Ajuste para el contenido principal */
+main {
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Estilos base para secciones */
+section {
+    position: relative;
+    width: 100%;
+    background-color: var(--background-color);
+    isolation: isolate;
+} 

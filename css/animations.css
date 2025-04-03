@@ -1,0 +1,92 @@
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Aplicación de animaciones */
+.hero-content {
+    animation: fadeIn 1s ease-out;
+}
+
+.about-content {
+    animation: slideIn 0.8s ease-out;
+}
+
+.portfolio-item {
+    animation: scaleIn 0.5s ease-out;
+    animation-fill-mode: both;
+}
+
+.portfolio-item:nth-child(1) { animation-delay: 0.1s; }
+.portfolio-item:nth-child(2) { animation-delay: 0.2s; }
+.portfolio-item:nth-child(3) { animation-delay: 0.3s; }
+.portfolio-item:nth-child(4) { animation-delay: 0.4s; }
+.portfolio-item:nth-child(5) { animation-delay: 0.5s; }
+.portfolio-item:nth-child(6) { animation-delay: 0.6s; }
+
+/* Transiciones suaves */
+.transition-all {
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+/* Efectos hover */
+.hover-scale {
+    transition: transform var(--transition-speed) ease-in-out;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-lift {
+    transition: transform var(--transition-speed) ease-in-out;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+/* Efectos de brillo */
+.glow {
+    transition: box-shadow var(--transition-speed) ease-in-out;
+}
+
+.glow:hover {
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.3);
+}
+
+/* Efectos de texto */
+.text-glow {
+    transition: text-shadow var(--transition-speed) ease-in-out;
+}
+
+.text-glow:hover {
+    text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+} 
