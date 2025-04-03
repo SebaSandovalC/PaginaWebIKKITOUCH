@@ -20,14 +20,45 @@
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#sobre-mi">Sobre Mí</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
+                <li>
+                    <a href="venta.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </li>
                 <li class="social-links">
                     <a href="https://www.instagram.com/ikkitouch/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.facebook.com/raul.g.maldonado.3/" target="_blank" class="social-icon"><i class="fab fa-facebook"></i></a>
                     <a href="https://www.deviantart.com/ikkitouch" target="_blank" class="social-icon"><i class="fab fa-deviantart"></i></a>
                 </li>
+                <li>
+                    <button id="theme-toggle" class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </li>
             </ul>
         </nav>
     </header>
+
+    <div class="mini-cart">
+        <div class="mini-cart-header">
+            <h3>Tu Carrito</h3>
+            <button class="close-mini-cart">&times;</button>
+        </div>
+        <div class="mini-cart-items">
+            <!-- Los items se agregarán dinámicamente -->
+        </div>
+        <div class="mini-cart-summary">
+            <div class="mini-cart-total">
+                <span>Total:</span>
+                <span class="mini-cart-total-amount">$0</span>
+            </div>
+            <div class="mini-cart-actions">
+                <button class="clear-cart-btn">Eliminar Todo</button>
+                <button class="checkout-btn">Ir a Pago</button>
+            </div>
+        </div>
+    </div>
 
     <main>
         <section id="inicio" class="hero">
@@ -51,15 +82,22 @@
 
             <!-- Modal para vista ampliada -->
             <div class="modal" id="imageModal">
-                <span class="close-modal">&times;</span>
                 <div class="modal-content">
-                    <img src="" alt="" id="modalImage">
+                    <div class="modal-image-container">
+                        <span class="close-modal">&times;</span>
+                        <img src="" alt="" id="modalImage">
+                    </div>
                     <div class="modal-info">
-                        <h3 id="modalTitle"></h3>
-                        <p id="modalDescription"></p>
+                        <div class="modal-info-left">
+                            <h3 id="modalTitle"></h3>
+                            <p id="modalDescription"></p>
+                        </div>
                         <div class="modal-price">
                             <span id="modalPrice"></span>
-                            <button class="add-to-cart-btn">Añadir al Carrito</button>
+                            <button class="add-to-cart-btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                Añadir al Carrito
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -87,10 +125,11 @@
                 <a href="https://www.facebook.com/raul.g.maldonado.3/" target="_blank" class="social-icon"><i class="fab fa-facebook"></i></a>
                 <a href="https://www.deviantart.com/ikkitouch" target="_blank" class="social-icon"><i class="fab fa-deviantart"></i></a>
             </div>
-            <p>&copy; 2025 Ikki Touch. Todos los derechos reservados.</p>
+            <p>&copy; 2025 IKKITOUCH. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <script src="cart.js"></script>
 </body>
 </html> 

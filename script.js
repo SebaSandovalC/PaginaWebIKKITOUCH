@@ -178,14 +178,31 @@ async function loadPortfolioImages() {
         dbz: 'IMG/portfolio/DBZ'
     };
 
+    // Almacenar todas las imágenes por categoría
+    const imagesByCategory = {};
+
     // Cargar imágenes de cada categoría
     for (const [category, path] of Object.entries(categories)) {
         const images = await getImagesFromCategory(path);
+        imagesByCategory[category] = images;
+        
+        // Crear elementos para todas las imágenes pero ocultarlos inicialmente
         images.forEach(image => {
             const item = createGalleryItem(image, category);
+            item.style.display = 'none'; // Ocultar inicialmente
             gallery.appendChild(item);
         });
     }
+
+    // Mostrar las primeras 2 imágenes de cada categoría inicialmente
+    for (const category in imagesByCategory) {
+        const categoryImages = document.querySelectorAll(`.gallery-item.${category}`);
+        for (let i = 0; i < Math.min(2, categoryImages.length); i++) {
+            categoryImages[i].style.display = 'block';
+        }
+    }
+
+    return imagesByCategory;
 }
 
 // Crear elemento de galería
@@ -229,13 +246,31 @@ function setupFilters() {
             
             // Filtrar items
             const items = document.querySelectorAll('.gallery-item');
-            items.forEach(item => {
-                if (category === 'all' || item.classList.contains(category)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+            
+            if (category === 'all') {
+                // Para "Todos", mostrar solo 2 imágenes por categoría
+                const categories = ['caballeros', 'pokemon', 'myl', 'dbz'];
+                
+                // Primero ocultar todas las imágenes
+                items.forEach(item => item.style.display = 'none');
+                
+                // Luego mostrar solo 2 de cada categoría
+                categories.forEach(cat => {
+                    const categoryItems = document.querySelectorAll(`.gallery-item.${cat}`);
+                    for (let i = 0; i < Math.min(2, categoryItems.length); i++) {
+                        categoryItems[i].style.display = 'block';
+                    }
+                });
+            } else {
+                // Para categorías específicas, mostrar todas las imágenes de esa categoría
+                items.forEach(item => {
+                    if (item.classList.contains(category)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
         });
     });
 }
@@ -258,7 +293,7 @@ function setupModal() {
     }
 }
 
-// Abrir modal
+// Función para abrir el modal
 function openModal(image) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
@@ -269,8 +304,22 @@ function openModal(image) {
     if (modal && modalImg && modalTitle && modalDescription && modalPrice) {
         modalImg.src = image.src;
         modalTitle.textContent = image.name;
-        modalDescription.textContent = 'Ilustración original de alta calidad';
+        modalDescription.textContent = 'Ilustración original';
         modalPrice.textContent = `$${image.price}`;
+        
+        // Configurar el botón de añadir al carrito
+        const modalContent = modal.querySelector('.modal-content');
+        const addToCartBtn = modalContent.querySelector('.add-to-cart-btn');
+        addToCartBtn.onclick = function() {
+            const item = {
+                id: image.name.toLowerCase().replace(/\s+/g, '-'),
+                name: image.name,
+                price: parseFloat(image.price),
+                image: image.src
+            };
+            window.cart.addItem(item);
+            closeModal();
+        };
         
         modal.classList.add('active');
     }
@@ -304,11 +353,11 @@ async function getImagesFromCategory(path) {
         ],
         'IMG/portfolio/MYL': [
             { src: 'IMG/portfolio/MYL/fereydun 2.webp', name: 'Fereydun', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Dragón dorado 2 final - copia.webp', name: 'Dragón Dorado', price: '40.00' },
+            { src: 'IMG/portfolio/MYL/Dragon dorado 2 final - copia.webp', name: 'Dragón Dorado', price: '40.00' },
             { src: 'IMG/portfolio/MYL/Greuceanu.webp', name: 'Greuceanu', price: '40.00' },
             { src: 'IMG/portfolio/MYL/Kamensky cmyk.webp', name: 'Kamensky', price: '40.00' },
             { src: 'IMG/portfolio/MYL/Parte_Trasera_Mesa_Redonda.webp', name: 'Mesa Redonda', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Capitán_Garfio.webp', name: 'Capitán Garfio', price: '40.00' },
+            { src: 'IMG/portfolio/MYL/Capitan_Garfio.webp', name: 'Capitán Garfio', price: '40.00' },
             { src: 'IMG/portfolio/MYL/Cthulhu.webp', name: 'Cthulhu', price: '40.00' },
             { src: 'IMG/portfolio/MYL/Londres.webp', name: 'Londres', price: '40.00' },
             { src: 'IMG/portfolio/MYL/Mac da tho 2.webp', name: 'Mac da Tho', price: '40.00' },
@@ -317,4 +366,38 @@ async function getImagesFromCategory(path) {
     };
 
     return images[path] || [];
+}
+
+// Theme toggle functionality
+const themeToggle = document.getElementById('theme-toggle');
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+// Check for saved theme preference or use system preference
+const currentTheme = localStorage.getItem('theme') || 
+    (prefersDarkScheme.matches ? 'dark' : 'light');
+
+// Apply the saved theme
+document.documentElement.setAttribute('data-theme', currentTheme);
+updateThemeIcon(currentTheme);
+
+// Toggle theme on button click
+themeToggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+});
+
+// Update theme icon based on current theme
+function updateThemeIcon(theme) {
+    const icon = themeToggle.querySelector('i');
+    if (theme === 'dark') {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+    }
 } 
