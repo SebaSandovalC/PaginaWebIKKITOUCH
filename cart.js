@@ -38,15 +38,19 @@ class ShoppingCart {
             });
         }
 
-        // Evento para ir a pago
-        const checkoutBtn = document.querySelector('.checkout-btn');
-        if (checkoutBtn) {
-            checkoutBtn.addEventListener('click', () => {
-                if (this.items.length === 0) {
-                    alert('El carrito está vacío');
-                    return;
-                }
-                window.location.href = 'venta.html';
+        // Evento para ir a pago - solo en el mini-carrito
+        const miniCartCheckoutBtn = document.querySelector('.mini-cart .checkout-btn');
+        if (miniCartCheckoutBtn) {
+            miniCartCheckoutBtn.addEventListener('click', () => {
+                this.checkout();
+            });
+        }
+
+        // Evento para ir a pago - solo en la página de venta
+        const cartPageCheckoutBtn = document.getElementById('checkout-btn');
+        if (cartPageCheckoutBtn) {
+            cartPageCheckoutBtn.addEventListener('click', () => {
+                this.checkout();
             });
         }
     }
@@ -108,45 +112,67 @@ class ShoppingCart {
 
     updateCartCount() {
         const count = this.items.reduce((total, item) => total + item.quantity, 0);
-        const cartCount = document.querySelector('.cart-count');
-        if (cartCount) {
+        const cartCounts = document.querySelectorAll('.cart-count');
+        cartCounts.forEach(cartCount => {
             cartCount.textContent = count;
-        }
+        });
     }
 
     renderMiniCart() {
         const miniCartItems = document.querySelector('.mini-cart-items');
         const miniCartTotal = document.querySelector('.mini-cart-total-amount');
         
-        if (!miniCartItems || !miniCartTotal) return;
-        
+        if (!miniCartItems) return;
+
         if (this.items.length === 0) {
-            miniCartItems.innerHTML = '<p class="empty-cart">El carrito está vacío</p>';
+            miniCartItems.innerHTML = `
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Tu carrito está vacío</p>
+                </div>
+            `;
             miniCartTotal.textContent = '$0';
             return;
         }
 
         miniCartItems.innerHTML = this.items.map(item => `
-            <div class="mini-cart-item">
-                <img src="${item.image}" alt="${item.name}">
+            <div class="mini-cart-item" data-id="${item.id}">
+                <img src="${item.image}" alt="${item.name}" class="mini-cart-item-image">
                 <div class="mini-cart-item-info">
-                    <div class="mini-cart-item-title">${item.name}</div>
-                    <div class="mini-cart-item-price">$${item.price}</div>
+                    <h4 class="mini-cart-item-title">${item.name}</h4>
+                    <p class="mini-cart-item-price">$${item.price}</p>
                     <div class="mini-cart-item-quantity">
                         <button class="quantity-btn minus" data-id="${item.id}">-</button>
                         <span class="quantity-display">${item.quantity}</span>
                         <button class="quantity-btn plus" data-id="${item.id}">+</button>
                     </div>
                 </div>
-                <button class="mini-cart-item-remove" onclick="window.cart.removeItem('${item.id}')">
+                <button class="mini-cart-item-remove" data-id="${item.id}">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
         `).join('');
 
+        // Agregar evento de clic a los items del mini-carrito
+        miniCartItems.querySelectorAll('.mini-cart-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                // Evitar que se active cuando se hace clic en los botones de cantidad o eliminar
+                if (e.target.closest('.quantity-btn') || e.target.closest('.mini-cart-item-remove')) {
+                    return;
+                }
+                
+                const itemId = item.dataset.id;
+                const cartItem = this.items.find(i => i.id === itemId);
+                if (cartItem) {
+                    this.showItemModal(cartItem);
+                }
+            });
+        });
+
         // Agregar event listeners para los botones de cantidad
         const plusButtons = miniCartItems.querySelectorAll('.quantity-btn.plus');
         const minusButtons = miniCartItems.querySelectorAll('.quantity-btn.minus');
+        const removeButtons = miniCartItems.querySelectorAll('.mini-cart-item-remove');
         
         plusButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -164,8 +190,50 @@ class ShoppingCart {
             });
         });
 
+        removeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.dataset.id;
+                this.removeItem(id);
+            });
+        });
+
         const total = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         miniCartTotal.textContent = `$${total.toFixed(2)}`;
+    }
+
+    showItemModal(item) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-image-container">
+                    <span class="close-modal">&times;</span>
+                    <img src="${item.image}" alt="${item.name}">
+                </div>
+                <div class="modal-info">
+                    <div class="modal-info-left">
+                        <h3>${item.name}</h3>
+                        <p>Precio: $${item.price}</p>
+                        <p>Cantidad: ${item.quantity}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        modal.style.display = 'block';
+
+        // Cerrar modal al hacer clic en la X
+        modal.querySelector('.close-modal').addEventListener('click', () => {
+            modal.remove();
+        });
+
+        // Cerrar modal al hacer clic fuera del contenido
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
     }
 
     // Calcular totales
@@ -254,6 +322,60 @@ class ShoppingCart {
                 window.location.href = 'index.html';
             });
         }
+    }
+
+    checkout() {
+        // Verificar si ya existe un pop-up activo
+        if (document.querySelector('.empty-cart-popup.active')) {
+            return;
+        }
+
+        // Verificar si el carrito está vacío
+        if (this.items.length === 0) {
+            // Crear el pop-up de carrito vacío
+            const popup = document.createElement('div');
+            popup.className = 'empty-cart-popup';
+            popup.innerHTML = `
+                <div class="empty-cart-content">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Carrito Vacío</h3>
+                    <p>Tu carrito está vacío. Agrega algunos productos antes de proceder al pago.</p>
+                    <button class="close-popup">Entendido</button>
+                </div>
+            `;
+            document.body.appendChild(popup);
+
+            // Agregar clase para animación
+            setTimeout(() => {
+                popup.classList.add('active');
+            }, 10);
+
+            // Cerrar pop-up al hacer clic en el botón o fuera del contenido
+            const closePopup = () => {
+                popup.classList.remove('active');
+                setTimeout(() => {
+                    popup.remove();
+                }, 300);
+            };
+
+            // Agregar evento de clic al botón de cerrar
+            const closeButton = popup.querySelector('.close-popup');
+            if (closeButton) {
+                closeButton.addEventListener('click', closePopup);
+            }
+
+            // Agregar evento de clic al fondo
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    closePopup();
+                }
+            });
+
+            return;
+        }
+
+        // Si el carrito no está vacío, redirigir a la página de venta
+        window.location.href = 'venta.html';
     }
 }
 

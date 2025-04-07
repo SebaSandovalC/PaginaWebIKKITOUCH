@@ -1,6 +1,13 @@
 // Verificar si estamos en la página principal
 const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
 
+// Inicializar el carrito
+document.addEventListener('DOMContentLoaded', () => {
+    if (!window.cart) {
+        window.cart = new ShoppingCart();
+    }
+});
+
 // Efecto de scroll suave para los enlaces de navegación
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
