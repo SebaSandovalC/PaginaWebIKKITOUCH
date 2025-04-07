@@ -1,4 +1,4 @@
-# Ikki Touch - Tienda de Arte Digital
+# IKKITOUCH - Ilustrador Chileno.
 
 Una elegante tienda en línea especializada en arte digital, con un diseño moderno y funcionalidades interactivas.
 
@@ -115,6 +115,6 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## ✨ Créditos
 
-- Diseño y desarrollo por [Tu Nombre]
+- Diseño y desarrollo por [SebaSandovalC]
 - Iconos por Font Awesome
 - Fuentes por Google Fonts 
