@@ -19,48 +19,20 @@
             <ul class="nav-links">
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#sobre-mi">Sobre Mí</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-                <li>
-                    <a href="venta.html" class="cart-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">0</span>
-                    </a>
-                </li>
+                <li><a href="#contacto">Contacto</a></li>
+
                 <li class="social-links">
                     <a href="https://www.instagram.com/ikkitouch/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/raul.g.maldonado.3/" target="_blank" class="social-icon"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.artstation.com/ikkitouchart" target="_blank" class="social-icon"><i class="fab fa-artstation"></i></a>
+                    <a href="https://www.canva.com/design/DAGolgEZGdE/gBpsIGWRYhD0fwl-g2XfTQ/edit" target="_blank" class="social-icon"><i class="fas fa-palette"></i></a>
                     <a href="https://www.deviantart.com/ikkitouch" target="_blank" class="social-icon"><i class="fab fa-deviantart"></i></a>
                 </li>
-                <li>
-                    <button id="theme-toggle" class="theme-toggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </li>
+
             </ul>
         </nav>
     </header>
 
-    <div class="mini-cart">
-        <div class="mini-cart-header">
-            <h3>Tu Carrito</h3>
-            <button class="close-mini-cart">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="mini-cart-items">
-            <!-- Los items se agregarán dinámicamente -->
-        </div>
-        <div class="mini-cart-footer">
-            <div class="mini-cart-total">
-                <span>Total:</span>
-                <span class="mini-cart-total-amount">$0</span>
-            </div>
-            <div class="mini-cart-buttons">
-                <button class="clear-cart-btn">Eliminar Todo</button>
-                <button class="checkout-btn">Ir a Pago</button>
-            </div>
-        </div>
-    </div>
+
 
     <main>
         <section id="inicio" class="hero">
@@ -82,24 +54,67 @@
                 <!-- Las imágenes se cargarán dinámicamente con JavaScript -->
             </div>
 
-            <!-- Modal para vista ampliada -->
+            <!-- Modal para vista ampliada - Estilo Instagram/Behance -->
             <div class="modal" id="imageModal">
-                <div class="modal-content">
+                <div class="modal-backdrop">
+                    <span class="close-modal">&times;</span>
+                    
+                    <!-- Imagen principal centrada -->
                     <div class="modal-image-container">
-                        <span class="close-modal">&times;</span>
                         <img src="" alt="" id="modalImage">
                     </div>
-                    <div class="modal-info">
-                        <div class="modal-info-left">
-                            <h3 id="modalTitle"></h3>
-                            <p id="modalDescription"></p>
+                    
+                    <!-- Panel de información deslizable -->
+                    <div class="modal-info-panel" id="modalInfoPanel">
+                        <div class="modal-info-handle">
+                            <div class="handle-bar"></div>
                         </div>
-                        <div class="modal-price">
-                            <span id="modalPrice"></span>
-                            <button class="add-to-cart-btn">
-                                <i class="fas fa-shopping-cart"></i>
-                                Añadir al Carrito
-                            </button>
+                        
+                        <div class="modal-info-content">
+                            <div class="modal-header">
+                                <h3 id="modalTitle"></h3>
+                                <div class="modal-actions">
+                                    <button class="action-btn like-btn" title="Me gusta">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="action-btn share-btn" title="Compartir">
+                                        <i class="fas fa-share"></i>
+                                    </button>
+                                    <button class="action-btn download-btn" title="Información">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-details">
+                                <p id="modalDescription"></p>
+                                
+                                <div class="artwork-metadata">
+                                    <div class="metadata-item">
+                                        <span class="metadata-label">Categoría:</span>
+                                        <span class="metadata-value" id="modalCategory"></span>
+                                    </div>
+                                    <div class="metadata-item">
+                                        <span class="metadata-label">Técnica:</span>
+                                        <span class="metadata-value">Ilustración Digital</span>
+                                    </div>
+                                    <div class="metadata-item">
+                                        <span class="metadata-label">Año:</span>
+                                        <span class="metadata-value">2024</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-price-section">
+                                    <div class="price-display">
+                                        <span class="price-label">Precio:</span>
+                                        <span class="price-value" id="modalPrice">$25</span>
+                                    </div>
+                                    <button class="add-to-cart-btn" id="addToCartBtn">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Añadir al Carrito
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,7 +129,70 @@
                     <p>Me especializo en la creación de ilustraciones que capturan la esencia de cada idea, transformándolas en imágenes únicas que transmiten emoción y narrativa. Siempre estoy en búsqueda de nuevos desafíos y colaboraciones que me permitan seguir explorando el arte en todas sus formas.</p>
                 </div>
                 <div class="about-image">
-                    <img src="IMG/fotoraulperfil.webp" alt="Raúl - Ilustrador">
+                    <img src="IMG/logo.webp" alt="IKKITOUCH - Logo">
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="contact">
+            <h2><span>Contacto</span></h2>
+            <div class="contact-container">
+                <div class="contact-collage">
+                    <div class="collage-grid">
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/DBZ/Bills 2.webp" alt="Bills" loading="lazy">
+                        </div>
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/POKE/Gengar 3.webp" alt="Gengar" loading="lazy">
+                        </div>
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/DBZ/Piccolo.webp" alt="Piccolo" loading="lazy">
+                        </div>
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/MYL/Dragon dorado 2 final - copia.webp" alt="Dragón Dorado" loading="lazy">
+                        </div>
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/POKE/Charmander.webp" alt="Charmander" loading="lazy">
+                        </div>
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/DBZ/Freezer normal - copia.webp" alt="Freezer" loading="lazy">
+                        </div>
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/MYL/Cthulhu.webp" alt="Cthulhu" loading="lazy">
+                        </div>
+                        <div class="collage-item">
+                            <img src="IMG/portfolio/MYL/Greuceanu.webp" alt="Greuceanu" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-box">
+                    <div class="contact-box-decoration">
+                        <div class="decoration-circle"></div>
+                        <div class="decoration-line"></div>
+                        <div class="decoration-dot"></div>
+                    </div>
+                    <div class="contact-box-content">
+                        <h3>Envíame un mensaje</h3>
+                        <p>Cuéntame sobre tu proyecto y me pondré en contacto contigo lo antes posible.</p>
+                        <form class="contact-form">
+                            <div class="form-group">
+                                <input type="text" placeholder="Ingresa tu nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" placeholder="Ingresa tu correo electrónico" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" placeholder="Asunto del mensaje" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea placeholder="Escribe tu mensaje aquí..." required></textarea>
+                            </div>
+                            <button type="submit">
+                                Enviar Mensaje
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -124,7 +202,8 @@
         <div class="footer-content">
             <div class="social-links">
                 <a href="https://www.instagram.com/ikkitouch/" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.facebook.com/raul.g.maldonado.3/" target="_blank" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.artstation.com/ikkitouchart" target="_blank" class="social-icon"><i class="fab fa-artstation"></i></a>
+                <a href="https://www.canva.com/design/DAGolgEZGdE/gBpsIGWRYhD0fwl-g2XfTQ/edit" target="_blank" class="social-icon"><i class="fas fa-palette"></i></a>
                 <a href="https://www.deviantart.com/ikkitouch" target="_blank" class="social-icon"><i class="fab fa-deviantart"></i></a>
             </div>
             <p>&copy; 2025 IKKITOUCH. Todos los derechos reservados.</p>
@@ -132,6 +211,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script src="cart.js"></script>
 </body>
 </html> 

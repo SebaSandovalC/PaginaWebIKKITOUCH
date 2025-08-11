@@ -1,12 +1,7 @@
 // Verificar si estamos en la página principal
 const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
 
-// Inicializar el carrito
-document.addEventListener('DOMContentLoaded', () => {
-    if (!window.cart) {
-        window.cart = new ShoppingCart();
-    }
-});
+
 
 // Efecto de scroll suave para los enlaces de navegación
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -100,19 +95,19 @@ const modal = document.getElementById('imageModal');
 const modalImg = document.getElementById('modalImage');
 const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
-const modalPrice = document.getElementById('modalPrice');
+
 const closeBtn = document.querySelector('.close-modal');
 
-if (modal && modalImg && modalPrice && closeBtn) {
+if (modal && modalImg && closeBtn) {
     portfolioItems.forEach(item => {
         item.addEventListener('click', () => {
             const img = item.querySelector('img');
-            const price = item.querySelector('.price').textContent;
+    
             
             modalImg.src = img.src;
             modalTitle.textContent = img.alt;
             modalDescription.textContent = 'Ilustración original';
-            modalPrice.textContent = price;
+
             modal.classList.add('active');
         });
     });
@@ -222,7 +217,6 @@ function createGalleryItem(image, category) {
         <div class="overlay">
             <h3>${image.name}</h3>
             <p>Ilustración original</p>
-            <span class="price">$${image.price}</span>
         </div>
     `;
 
@@ -282,22 +276,107 @@ function setupFilters() {
     });
 }
 
-// Configurar modal
+// Configurar modal estilo Instagram/Behance
 function setupModal() {
     const modal = document.getElementById('imageModal');
     const closeBtn = document.querySelector('.close-modal');
+    const infoPanel = document.getElementById('modalInfoPanel');
+    const infoHandle = document.querySelector('.modal-info-handle');
     
     if (modal && closeBtn) {
+        // Cerrar modal
         closeBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
+            closeModal();
         });
         
+        // Cerrar al hacer click en el fondo
         window.addEventListener('click', (e) => {
             if (e.target === modal) {
-                modal.classList.remove('active');
+                closeModal();
+            }
+        });
+        
+        // Manejar panel deslizable
+        if (infoHandle && infoPanel) {
+            infoHandle.addEventListener('click', () => {
+                infoPanel.classList.toggle('active');
+            });
+        }
+        
+        // Auto-mostrar panel después de 1 segundo
+        setTimeout(() => {
+            if (infoPanel) {
+                infoPanel.classList.add('active');
+            }
+        }, 1000);
+        
+        // Configurar botones de acción
+        setupModalActions();
+    }
+}
+
+// Configurar acciones del modal
+function setupModalActions() {
+    const likeBtn = document.querySelector('.like-btn');
+    const shareBtn = document.querySelector('.share-btn');
+    const downloadBtn = document.querySelector('.download-btn');
+    
+    if (likeBtn) {
+        likeBtn.addEventListener('click', () => {
+            likeBtn.classList.toggle('liked');
+        });
+    }
+    
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            // Funcionalidad de compartir
+            if (navigator.share) {
+                navigator.share({
+                    title: 'IKKITOUCH - Ilustración',
+                    text: 'Mira esta increíble ilustración',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback para navegadores que no soportan Web Share API
+                navigator.clipboard.writeText(window.location.href);
+                showNotification('¡Enlace copiado al portapapeles!');
             }
         });
     }
+    
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => {
+            showNotification('Información de contacto disponible en la sección de contacto');
+        });
+    }
+}
+
+// Función para mostrar notificaciones
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--secondary-color);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        z-index: 3000;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => document.body.removeChild(notification), 300);
+    }, 3000);
 }
 
 // Función para abrir el modal
@@ -306,105 +385,119 @@ function openModal(image) {
     const modalImg = document.getElementById('modalImage');
     const modalTitle = document.getElementById('modalTitle');
     const modalDescription = document.getElementById('modalDescription');
+    const modalCategory = document.getElementById('modalCategory');
     const modalPrice = document.getElementById('modalPrice');
+    const infoPanel = document.getElementById('modalInfoPanel');
     
-    if (modal && modalImg && modalTitle && modalDescription && modalPrice) {
+    if (modal && modalImg && modalTitle && modalDescription) {
+        // Configurar imagen
         modalImg.src = image.src;
         modalTitle.textContent = image.name;
-        modalDescription.textContent = 'Ilustración original';
-        modalPrice.textContent = `$${image.price}`;
+        modalDescription.textContent = 'Ilustración digital original creada con técnicas avanzadas de arte digital. Cada pieza refleja la pasión por el arte y la atención al detalle.';
         
-        // Configurar el botón de añadir al carrito
-        const modalContent = modal.querySelector('.modal-content');
-        const addToCartBtn = modalContent.querySelector('.add-to-cart-btn');
-        addToCartBtn.onclick = function() {
-            const item = {
-                id: image.name.toLowerCase().replace(/\s+/g, '-'),
-                name: image.name,
-                price: parseFloat(image.price),
-                image: image.src
-            };
-            window.cart.addItem(item);
-            closeModal();
-        };
+        // Configurar categoría
+        if (modalCategory) {
+            const category = getCategoryFromPath(image.src);
+            modalCategory.textContent = category;
+        }
         
+        // Configurar precio
+        if (modalPrice) {
+            const price = getPriceForCategory(image.src);
+            modalPrice.textContent = `$${price}`;
+        }
+        
+        // Resetear panel de información
+        if (infoPanel) {
+            infoPanel.classList.remove('active');
+        }
+        
+        // Mostrar modal
         modal.classList.add('active');
+        
+        // Auto-mostrar panel después de 1 segundo
+        setTimeout(() => {
+            if (infoPanel) {
+                infoPanel.classList.add('active');
+            }
+        }, 1000);
     }
+}
+
+// Función para cerrar el modal
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    const infoPanel = document.getElementById('modalInfoPanel');
+    
+    if (infoPanel) {
+        infoPanel.classList.remove('active');
+    }
+    
+    setTimeout(() => {
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }, 200);
+}
+
+// Función auxiliar para obtener categoría desde la ruta
+function getCategoryFromPath(imagePath) {
+    if (imagePath.includes('CABALLEROS')) return 'Caballeros del Zodíaco';
+    if (imagePath.includes('POKE')) return 'Pokémon';
+    if (imagePath.includes('DBZ')) return 'Dragon Ball Z';
+    if (imagePath.includes('MYL')) return 'Mitos y Leyendas';
+    return 'Portfolio';
+}
+
+// Función auxiliar para obtener precio por categoría
+function getPriceForCategory(imagePath) {
+    if (imagePath.includes('CABALLEROS')) return 30;
+    if (imagePath.includes('POKE')) return 25;
+    if (imagePath.includes('DBZ')) return 35;
+    if (imagePath.includes('MYL')) return 40;
+    return 25;
 }
 
 // Función auxiliar para obtener imágenes de una categoría
 async function getImagesFromCategory(path) {
     const images = {
         'IMG/portfolio/CABALLEROS DEL ZODIACO': [
-            { src: 'IMG/portfolio/CABALLEROS DEL ZODIACO/Hila_De_Polaris.webp', name: 'Hila De Polaris', price: '30.00' },
-            { src: 'IMG/portfolio/CABALLEROS DEL ZODIACO/capricornio.webp', name: 'Capricornio', price: '30.00' }
+            { src: 'IMG/portfolio/CABALLEROS DEL ZODIACO/Hila_De_Polaris.webp', name: 'Hila De Polaris' },
+            { src: 'IMG/portfolio/CABALLEROS DEL ZODIACO/capricornio.webp', name: 'Capricornio' }
         ],
         'IMG/portfolio/POKE': [
-            { src: 'IMG/portfolio/POKE/Charmander.webp', name: 'Charmander', price: '25.00' },
-            { src: 'IMG/portfolio/POKE/Gengar - copia.webp', name: 'Gengar', price: '25.00' },
-            { src: 'IMG/portfolio/POKE/Gengar 3.webp', name: 'Gengar Oscuro', price: '25.00' },
-            { src: 'IMG/portfolio/POKE/Mewtwo - copia.webp', name: 'Mewtwo', price: '25.00' },
-            { src: 'IMG/portfolio/POKE/pikachu - copia.webp', name: 'Pikachu', price: '25.00' }
+            { src: 'IMG/portfolio/POKE/Charmander.webp', name: 'Charmander' },
+            { src: 'IMG/portfolio/POKE/Gengar - copia.webp', name: 'Gengar' },
+            { src: 'IMG/portfolio/POKE/Gengar 3.webp', name: 'Gengar Oscuro' },
+            { src: 'IMG/portfolio/POKE/Mewtwo - copia.webp', name: 'Mewtwo' },
+            { src: 'IMG/portfolio/POKE/pikachu - copia.webp', name: 'Pikachu' }
         ],
         'IMG/portfolio/DBZ': [
-            { src: 'IMG/portfolio/DBZ/Black goku.webp', name: 'Black Goku', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Dbz.webp', name: 'Janemba', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Bills 2.webp', name: 'Bills', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Cell medio.webp', name: 'Cell Medio', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Db final.webp', name: 'DB Final', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Majin bu gordo.webp', name: 'Majin Buu', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Piccolo.webp', name: 'Piccolo', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Cell.webp', name: 'Cell', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Freezer normal - copia.webp', name: 'Freezer', price: '35.00' },
-            { src: 'IMG/portfolio/DBZ/Kid buu.webp', name: 'Kid Buu', price: '35.00' }
+            { src: 'IMG/portfolio/DBZ/Black goku.webp', name: 'Black Goku' },
+            { src: 'IMG/portfolio/DBZ/Dbz.webp', name: 'Janemba' },
+            { src: 'IMG/portfolio/DBZ/Bills 2.webp', name: 'Bills' },
+            { src: 'IMG/portfolio/DBZ/Cell medio.webp', name: 'Cell Medio' },
+            { src: 'IMG/portfolio/DBZ/Db final.webp', name: 'DB Final' },
+            { src: 'IMG/portfolio/DBZ/Majin bu gordo.webp', name: 'Majin Buu' },
+            { src: 'IMG/portfolio/DBZ/Piccolo.webp', name: 'Piccolo' },
+            { src: 'IMG/portfolio/DBZ/Cell.webp', name: 'Cell' },
+            { src: 'IMG/portfolio/DBZ/Freezer normal - copia.webp', name: 'Freezer' },
+            { src: 'IMG/portfolio/DBZ/Kid buu.webp', name: 'Kid Buu' }
         ],
         'IMG/portfolio/MYL': [
-            { src: 'IMG/portfolio/MYL/fereydun 2.webp', name: 'Fereydun', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Dragon dorado 2 final - copia.webp', name: 'Dragón Dorado', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Greuceanu.webp', name: 'Greuceanu', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Kamensky cmyk.webp', name: 'Kamensky', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Parte_Trasera_Mesa_Redonda.webp', name: 'Mesa Redonda', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Capitan_Garfio.webp', name: 'Capitán Garfio', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Cthulhu.webp', name: 'Cthulhu', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Londres.webp', name: 'Londres', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/Mac da tho 2.webp', name: 'Mac da Tho', price: '40.00' },
-            { src: 'IMG/portfolio/MYL/finn mac cool.webp', name: 'Finn Mac Cool', price: '40.00' }
+            { src: 'IMG/portfolio/MYL/fereydun 2.webp', name: 'Fereydun' },
+            { src: 'IMG/portfolio/MYL/Dragon dorado 2 final - copia.webp', name: 'Dragón Dorado' },
+            { src: 'IMG/portfolio/MYL/Greuceanu.webp', name: 'Greuceanu' },
+            { src: 'IMG/portfolio/MYL/Kamensky cmyk.webp', name: 'Kamensky' },
+            { src: 'IMG/portfolio/MYL/Parte_Trasera_Mesa_Redonda.webp', name: 'Mesa Redonda' },
+            { src: 'IMG/portfolio/MYL/Capitan_Garfio.webp', name: 'Capitán Garfio' },
+            { src: 'IMG/portfolio/MYL/Cthulhu.webp', name: 'Cthulhu' },
+            { src: 'IMG/portfolio/MYL/Londres.webp', name: 'Londres' },
+            { src: 'IMG/portfolio/MYL/Mac da tho 2.webp', name: 'Mac da Tho' },
+            { src: 'IMG/portfolio/MYL/finn mac cool.webp', name: 'Finn Mac Cool' }
         ]
     };
 
     return images[path] || [];
 }
-
-// Theme toggle functionality
-const themeToggle = document.getElementById('theme-toggle');
-const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-// Check for saved theme preference or use system preference
-const currentTheme = localStorage.getItem('theme') || 
-    (prefersDarkScheme.matches ? 'dark' : 'light');
-
-// Apply the saved theme
-document.documentElement.setAttribute('data-theme', currentTheme);
-updateThemeIcon(currentTheme);
-
-// Toggle theme on button click
-themeToggle.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
-});
-
-// Update theme icon based on current theme
-function updateThemeIcon(theme) {
-    const icon = themeToggle.querySelector('i');
-    if (theme === 'dark') {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-    } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-    }
-} 
+ 
